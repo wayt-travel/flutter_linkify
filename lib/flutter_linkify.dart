@@ -1,19 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:linkify/linkify.dart';
 
-export 'package:linkify/linkify.dart'
-    show
-        LinkifyElement,
-        LinkifyOptions,
-        LinkableElement,
-        TextElement,
-        Linkifier,
-        UrlElement,
-        UrlLinkifier,
-        EmailElement,
-        EmailLinkifier;
+import 'src/linkify.dart';
+
+export 'src/linkify.dart';
+export 'src/email.dart' show EmailLinkifier, EmailElement;
+export 'src/url.dart' show UrlLinkifier, UrlElement;
+export 'src/user_tag.dart' show UserTagLinkifier, UserTagElement;
 
 /// Callback clicked link
 typedef LinkCallback = void Function(LinkableElement link);
@@ -106,12 +99,12 @@ class Linkify extends StatelessWidget {
     return Text.rich(
       buildTextSpan(
         elements,
-        style: Theme.of(context).textTheme.bodyText2?.merge(style),
+        style: Theme.of(context).textTheme.bodyMedium?.merge(style),
         onOpen: onOpen,
         useMouseRegion: true,
         linkStyle: Theme.of(context)
             .textTheme
-            .bodyText2
+            .bodyMedium
             ?.merge(style)
             .copyWith(
               color: Colors.blueAccent,
@@ -271,11 +264,11 @@ class SelectableLinkify extends StatelessWidget {
     return SelectableText.rich(
       buildTextSpan(
         elements,
-        style: Theme.of(context).textTheme.bodyText2?.merge(style),
+        style: Theme.of(context).textTheme.bodyMedium?.merge(style),
         onOpen: onOpen,
         linkStyle: Theme.of(context)
             .textTheme
-            .bodyText2
+            .bodyMedium
             ?.merge(style)
             .copyWith(
               color: Colors.blueAccent,
@@ -341,14 +334,18 @@ TextSpan buildTextSpan(
               inlineSpan: TextSpan(
                 text: element.text,
                 style: linkStyle,
-                recognizer: onOpen != null ? (TapGestureRecognizer()..onTap = () => onOpen(element)) : null,
+                recognizer: onOpen != null
+                    ? (TapGestureRecognizer()..onTap = () => onOpen(element))
+                    : null,
               ),
             );
           } else {
             return TextSpan(
               text: element.text,
               style: linkStyle,
-              recognizer: onOpen != null ? (TapGestureRecognizer()..onTap = () => onOpen(element)) : null,
+              recognizer: onOpen != null
+                  ? (TapGestureRecognizer()..onTap = () => onOpen(element))
+                  : null,
             );
           }
         } else {
